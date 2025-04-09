@@ -1,0 +1,5 @@
+* text=auto
+*.html eol=lf
+*.py eol=lf
+*.json eol=lf
+*.txt eol=lf
