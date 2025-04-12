@@ -15,7 +15,8 @@ venv/
 *.pot
 
 # Media and static files:
-static/
+
+
 media/
 
 # SQLite DB
