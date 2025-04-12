@@ -1,30 +1,32 @@
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import HttpResponseRedirect
 from products.models import Product, ProductCategory, Basket
-from users.models import User
+from django.views.generic.base import TemplateView
+from django.views.generic.list import ListView
 from  django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
+from common.views import TitleMixin
 # Create your views here.
 
-def index(request):
-    context = {
-        "title": "STORE",
-    }
-    return render(request, "products/index.html", context)
 
 
-def products(request, category_id=None, page_number=1):
-    products_ = Product.objects.filter(category__id=category_id) if category_id else Product.objects.all()
-    per_page = 3
-    paginator = Paginator(products_, per_page)
-    products_paginator = paginator.page(page_number)
+class IndexView(TitleMixin,TemplateView):
+    template_name = "products/index.html"
+    title = "STORE"
 
-    context = {
-        "title": "Store - Каталог",
-        "categories": ProductCategory.objects.all(),
-        "products": products_paginator,
-    }
 
-    return render(request, "products/products.html", context)
+class ProductsListView(TitleMixin,ListView):
+    model = Product
+    template_name = "products/products.html"
+    paginate_by = 3
+    title = "Store - Каталог"
+    def get_queryset(self):
+        queryset = super(ProductsListView, self).get_queryset()
+        category_id = self.kwargs.get('category_id')
+        return queryset.filter(category_id= category_id) if category_id else queryset
+    def get_context_data(self, **kwargs):
+        context = super(ProductsListView, self).get_context_data()
+        context['categories'] = ProductCategory.objects.all()
+        context['selected_category'] = self.kwargs.get('category_id')
+        return context
 
 @login_required
 def basket_add(request, product_id):
