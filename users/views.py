@@ -10,7 +10,7 @@ from users.forms import UserLoginForm, UserProfileFrom, UserRegistrationForm
 from users.models import EmailVerification, User
 
 
-class UserLoginView(TitleMixin,LoginView):
+class UserLoginView(TitleMixin, LoginView):
     template_name = "users/login.html"
     form_class = UserLoginForm
     title = 'Store - Авторизация'
@@ -31,7 +31,7 @@ class UserProfileView(TitleMixin,UpdateView):
     template_name = "users/profile.html"
     title = 'Store - Личный кабинет'
     def get_success_url(self, **kwargs):
-        return reverse_lazy("users:profile", args = (self.object.id, ))
+        return reverse_lazy("users:profile", args=(self.object.id, ))
 
 class EmailVerificationView(TitleMixin, TemplateView):
     title = "Store - Подтверждение электронной почты"
