@@ -1,7 +1,8 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page
 
 from products.views import ProductsListView, basket_add, basket_remove
-from django.views.decorators.cache import cache_page
+
 app_name = 'products'
 urlpatterns = [
     path('', cache_page(30) (ProductsListView.as_view()), name="index"),
